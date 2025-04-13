@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="stat">
+    <canvas id="severityChart" width="400" height="200"></canvas>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const ctx = document.getElementById('severityChart').getContext('2d');
+  
+    const data = {
+      labels: {{ chart_labels|safe }},
+      datasets: [{
+        label: 'Average Severity Scores',
+        data: {{ chart_data|safe }},
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      }]
+    };
+  
+    new Chart(ctx, {
+      type: 'line',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            suggestedMax: 10
+          }
+        }
+      }
+    });
+  </script>
+  
+
+{% endblock %}

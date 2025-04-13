@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mental Health Assessment</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .navbar {
+            background-color: #4CAF50;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 40px 20px;
+        }
+
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .tile {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .tile:hover {
+            transform: translateY(-5px);
+        }
+
+        .tile a {
+            text-decoration: none;
+            color: #333;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .tile a:hover {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <a href="/profile">Profile</a>
+            <a href="/assessment">Assessment</a>
+            <a href="/statistics">Statistics</a>
+            <a href="/about">About</a>
+            <a href="/get-help">Get Help</a>
+        </div>
+        <div>
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" style="background:none;border:none;color:white;font-weight:bold;cursor:pointer;">Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tiles">
+            <div class="tile"><a href="/assessment">Take Assessment</a></div>
+            <div class="tile"><a href="/statistics">View Statistics</a></div>
+            <div class="tile"><a href="/profile">Your Profile</a></div>
+            <div class="tile"><a href="/get-help">Get Help</a></div>
+            <div class="tile"><a href="/about">About This Platform</a></div>
+        </div>
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

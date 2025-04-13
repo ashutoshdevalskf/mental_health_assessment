@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .question-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        background: #fff;
+    }
+
+    .question-container h2 {
+        color: #4CAF50;
+        margin-bottom: 20px;
+    }
+
+    .question-container label {
+        display: block;
+        margin: 10px 0;
+        font-weight: 500;
+    }
+
+    .submit-btn {
+        background-color: #4CAF50;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="question-container">
+    <h2>Question {{ question_number }} of {{ total }}</h2>
+    <form method="post">{% csrf_token %}
+        <p><strong>{{ question.text }}</strong></p>
+        <label><input type="radio" name="answer" value="1" required> Never</label>
+        <label><input type="radio" name="answer" value="2"> Rarely</label>
+        <label><input type="radio" name="answer" value="3"> Sometimes</label>
+        <label><input type="radio" name="answer" value="4"> Often</label>
+        <label><input type="radio" name="answer" value="5"> Always</label>
+        <button class="submit-btn" type="submit">Next</button>
+    </form>
+</div>
+{% endblock %}

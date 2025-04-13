@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+  .results-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 40px;
+  }
+
+  .result-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 220px;
+    text-align: center;
+  }
+
+  .progress-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px;
+  }
+
+  .progress-circle svg {
+    transform: rotate(-90deg);
+  }
+
+  .progress-circle circle {
+    fill: none;
+    stroke-width: 10;
+  }
+
+  .progress-bg {
+    stroke: #eee;
+  }
+
+  .progress-bar {
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease;
+  }
+
+  .progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .disorder-name {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #333;
+  }
+
+  .legend {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .legend-item {
+    display: inline-block;
+    margin: 0 15px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .legend-color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border-radius: 50%;
+  }
+</style>
+
+<h2 style="text-align:center; margin-top: 30px;">🧠 Your Mental Health Assessment Results</h2>
+
+<div class="results-container">
+  {% for result in results %}
+    <div class="result-card">
+      <div class="progress-circle">
+        <svg width="120" height="120">
+          <circle class="progress-bg" cx="60" cy="60" r="50" />
+          <circle 
+            class="progress-bar" 
+            cx="60" cy="60" r="50"
+            stroke-dasharray="314"
+            stroke-dashoffset="{{ result.dash_offset }}"
+            stroke="{{ result.color }}"
+          />
+        </svg>
+        <div class="progress-text">{{ result.percent }}%</div>
+      </div>
+      <div class="disorder-name">{{ result.disorder|capfirst }}</div>
+      <div style="color: #888;">{{ result.severity }}</div>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-color" style="background:#4CAF50;"></span>None</div>
+  <div class="legend-item"><span class="legend-color" style="background:#FFC107;"></span>Mild</div>
+  <div class="legend-item"><span class="legend-color" style="background:#FF9800;"></span>Moderate</div>
+  <div class="legend-item"><span class="legend-color" style="background:#FF5722;"></span>Moderately Severe</div>
+  <div class="legend-item"><span class="legend-color" style="background:#F44336;"></span>Severe</div>
+</div>
+{% endblock %}
