@@ -1,6 +1,6 @@
 import json
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .forms import AssessmentForm
 from .models import AssessmentAttempt
 from .utils import calculate_disorder_scores
@@ -14,46 +14,69 @@ import io
 import base64
 import matplotlib.pyplot as plt
 
+ASSESSMENT_JSON = {
+    1: 'questionnaire.json',   # General Mental Health Test
+    2: 'phq9.json',            # Depression‑specific
+    3: 'gad7.json',            # Anxiety‑specific
+    4: 'oci-r.json',           # OCD‑specific
+}
+
+class QuestionMock:
+    def __init__(self, data):
+        self.id = data['id']
+        self.text = data['text']
+        self.reverse_scored = data.get('reverse_scored', False)
+        self.weight = data.get('weight', 1)
+        self.disorders = data['disorders']
+
 @login_required
-def assessment_view(request):
-    questions_path = os.path.join(settings.BASE_DIR, 'resources', 'questionnaire.json')
+def select_assessment_view(request):
+    assessments = Assessment.objects.all()
+    return render(request, 'assessment_select.html', {'assessments': assessments})
+
+@login_required
+def assessment_view(request, assessment_id):
+    assessment = get_object_or_404(Assessment, pk=assessment_id)
+    filename = ASSESSMENT_JSON.get(assessment_id)
+    questions_path = os.path.join(settings.BASE_DIR, 'resources', filename)
+
     with open(questions_path, 'r') as f:
         questions_data = json.load(f)
-
-    class QuestionMock:
-        def __init__(self, data):
-            self.id = data['id']
-            self.text = data['text']
-            self.reverse_scored = data.get('reverse_scored', False)
-            self.weight = data.get('weight', 1)
-            self.disorders = data['disorders']
 
     question_objs = [QuestionMock(q) for q in questions_data]
     total_questions = len(question_objs)
 
-    current_q = request.session.get('current_q', 0)
-    responses = request.session.get('responses', {})
+    key_curr = f'current_q_{assessment_id}'
+    key_resp = f'responses_{assessment_id}'
+    current_q = request.session.get(key_curr, 0)
+    responses = request.session.get(key_resp, {})
 
     if request.method == 'POST':
-        answer = request.POST.get('answer')
+        answer = request.POST['answer']
         qid = f'question-{question_objs[current_q].id}'
         responses[qid] = answer
-        request.session['responses'] = responses
+        request.session[key_resp] = responses
 
         current_q += 1
         if current_q >= total_questions:
-            # All questions answered
             question_bank = {
-                q.id: {"disorders": q.disorders, "reverse_scored": q.reverse_scored, "weight": q.weight}
+                q.id: {
+                    "disorders": q.disorders,
+                    "reverse_scored": q.reverse_scored,
+                    "weight": q.weight
+                }
                 for q in question_objs
             }
+
             formatted_responses = [
-                {"question_id": q.id, "answer": responses[f'question-{q.id}']}
+                {"question_id": q.id, "answer": responses[f"question-{q.id}"]}
                 for q in question_objs
             ]
 
-            raw_scores, severity_scores = calculate_disorder_scores(formatted_responses, question_bank)
-            assessment = Assessment.objects.get(title="General Mental Health Test")
+            raw_scores, severity_scores = calculate_disorder_scores(
+                formatted_responses,
+                question_bank
+            )
 
             AssessmentAttempt.objects.create(
                 user=request.user,
@@ -64,24 +87,32 @@ def assessment_view(request):
                 severity_scores=severity_scores
             )
 
-            # Clear session
-            request.session.pop('current_q', None)
-            request.session.pop('responses', None)
-            request.session['latest_results'] = severity_scores
+            request.session['latest_results'] = {
+                'severity': severity_scores,
+                'raw': raw_scores
+            }
+
+            request.session.pop(key_curr, None)
+            request.session.pop(key_resp, None)
 
             return redirect('results')
 
-        request.session['current_q'] = current_q
-        return redirect('assessment')
+        request.session[key_curr] = current_q
+        return redirect('assessment', assessment_id=assessment_id)
 
-    # Show current question
     question = question_objs[current_q]
-    return render(request, 'question_page.html', {'question': question, 'question_number': current_q + 1, 'total': total_questions})
-
+    return render(request, 'question_page.html', {
+        'assessment_title': assessment.title,
+        'question': question,
+        'question_number': current_q + 1,
+        'total': total_questions,
+    })
 
 @login_required
 def results_view(request):
-    latest_results = request.session.get('latest_results')
+    latest_results = request.session.get('latest_results', {})
+    severity_scores = latest_results.get('severity', {})
+    raw_scores = latest_results.get('raw', {})
 
     severity_to_percent = {
         'none': 0,
@@ -92,31 +123,32 @@ def results_view(request):
     }
 
     severity_to_color = {
-        'none': '#4CAF50',         # Green
-        'mild': '#FFC107',         # Amber
-        'moderate': '#FF9800',     # Orange
-        'moderately severe': '#FF5722', # Deep Orange
-        'severe': '#F44336'        # Red
+        'none': '#4CAF50',
+        'mild': '#FFC107',
+        'moderate': '#FF9800',
+        'moderately severe': '#FF5722',
+        'severe': '#F44336'
     }
 
     results_with_visual = []
-    for disorder, severity in latest_results.items():
+    for disorder, severity in severity_scores.items():
         severity_key = severity.lower()
         percent = severity_to_percent.get(severity_key, 0)
         dash_array = 314
         dash_offset = dash_array - int((dash_array * percent) / 100)
         color = severity_to_color.get(severity_key, '#4CAF50')
+        raw_score = raw_scores.get(disorder, 0)
+
         results_with_visual.append({
             'disorder': disorder,
             'severity': severity,
             'percent': percent,
+            'raw_score': raw_score,
             'dash_offset': dash_offset,
             'color': color
         })
 
     return render(request, 'results.html', {'results': results_with_visual})
-
-
 
 
 
@@ -160,39 +192,39 @@ def custom_login_view(request):
 
     return render(request, 'login.html')  # Your custom login template
 
-
 @login_required
-def statistics_view(request):
+def statistic_view(request):
     user = request.user
-    attempts = AssessmentAttempt.objects.filter(user=user)
+    attempts = user.assessmentattempt_set.order_by('attempted_at')
 
-    num_attempts = attempts.count()
-    average_score = round(sum(a.score for a in attempts) / num_attempts, 2) if num_attempts else 0
-    latest_attempt = attempts.order_by('-attempted_at').first()
+    labels = [attempt.attempted_at.strftime("%b %d") for attempt in attempts]
 
-    disorder_scores = defaultdict(list)
-    for attempt in attempts:
-        for disorder, score in attempt.severity_scores.items():
-            try:
-                disorder_scores[disorder].append(float(score))
-            except ValueError:
-                pass
-
-    average_severity = {
-        disorder: round(sum(scores) / len(scores), 2)
-        for disorder, scores in disorder_scores.items() if scores
+    SEVERITY_MAP = {
+        'none': 0,
+        'mild': 1,
+        'moderate': 2,
+        'moderately severe': 3,
+        'severe': 4
     }
 
-    # Prepare data for Chart.js
-    chart_labels = json.dumps(list(average_severity.keys()))
-    chart_data = json.dumps(list(average_severity.values()))
+    disorder_scores = {}
+    for attempt in attempts:
+        for disorder, severity in attempt.severity_scores.items():
+            disorder = disorder.lower()
+            severity_value = SEVERITY_MAP.get(severity.lower(), None)
+            if severity_value is not None:
+                disorder_scores.setdefault(disorder, []).append(severity_value)
 
     context = {
-        'num_attempts': num_attempts,
-        'average_score': average_score,
-        'latest_attempt': latest_attempt,
-        'average_severity': average_severity,
-        'chart_labels': chart_labels,
-        'chart_data': chart_data,
+        'labels': labels,
+        'disorder_scores': disorder_scores,
     }
     return render(request, 'statistics.html', context)
+
+
+def about_view(request):
+    return render(request, 'about.html')
+
+def get_help_view(request):
+    return render(request, 'get_help.html')
+

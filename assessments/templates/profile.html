@@ -1,128 +1,307 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+
+{% block content %}
 <style>
-  .badge {
+  /* Badge styling */
+  .severity-badge {
     display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     color: white;
-    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
   }
 
-  .severity-mild {
-    background-color: #4caf50;
-  }
+  .severity-none { background-color: #9e9e9e; }
+  .severity-mild { background-color: #4CAF50; }
+  .severity-moderate { background-color: #FF9800; }
+  .severity-moderately-severe { background-color: #FF5722; }
+  .severity-severe { background-color: #F44336; }
 
-  .severity-moderate {
-    background-color: #ffc107;
-    color: black;
-  }
-
-  .severity-severe {
-    background-color: #f44336;
-  }
-  .welcome-section {
+  /* Hero section styling */
+  .profile-hero {
+    background-color: #f5f9f5;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 40px;
     text-align: center;
-    margin-bottom: 30px;
+    border-bottom: 4px solid #4CAF50;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   }
 
-  .welcome-section h2 {
-    font-size: 2rem;
-    color: #4caf50;
+  .profile-hero h1 {
+    font-size: 2.4rem;
+    color: #4CAF50;
+    margin-bottom: 15px;
+    animation: fadeIn 0.8s ease-in-out;
   }
 
-  .welcome-section p {
-    font-size: 1.1rem;
+  .profile-hero p {
+    font-size: 1.15rem;
     color: #555;
-    margin-top: 5px;
+    max-width: 650px;
+    margin: 0 auto;
+    line-height: 1.6;
   }
 
-  .card-container {
+  /* Quote card styling */
+  .quote-card {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    padding: 25px 30px;
+    border-radius: 12px;
+    margin: 30px auto;
+    max-width: 750px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 6px 18px rgba(76, 175, 80, 0.15);
+  }
+
+  .quote-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #2e7d32;
+    font-style: italic;
+    line-height: 1.5;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-author {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #1b5e20;
+    font-size: 0.95rem;
+  }
+
+  .quote-mark {
+    position: absolute;
+    font-size: 6rem;
+    color: rgba(76, 175, 80, 0.1);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .quote-mark-left {
+    top: 10px;
+    left: 15px;
+  }
+
+  .quote-mark-right {
+    bottom: 0;
+    right: 15px;
+    transform: rotate(180deg);
+  }
+
+  /* Assessment history section */
+  .history-section {
+    margin-top: 40px;
+  }
+
+  .history-section h2 {
+    font-size: 1.6rem;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .history-section h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #e0e0e0;
+    margin-left: 15px;
+  }
+
+  /* Assessment cards grid */
+  .assessment-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
   }
 
-  .card {
+  .assessment-card {
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    transition: transform 0.2s;
+    padding: 25px;
+    transition: all 0.3s ease;
+    border-top: 4px solid #4CAF50;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
   }
 
-  .card:hover {
-    transform: scale(1.03);
+  .assessment-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
   }
 
-  .card h4 {
-    margin: 0 0 10px;
-    color: #333;
+  .assessment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
   }
 
-  .card .score {
-    font-size: 1.5rem;
-    color: #4caf50;
+  .assessment-card:hover::before {
+    width: 8px;
   }
 
-  .card .date {
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4CAF50;
+    margin: 0;
+  }
+
+  .card-date {
     font-size: 0.9rem;
-    color: #888;
-  }
-
-  .no-data {
-    text-align: center;
-    color: #888;
-    font-style: italic;
-  }
-
-  .motivational {
-    background: linear-gradient(to right, #a8edea, #fed6e3);
-    padding: 15px 25px;
-    border-radius: 8px;
-    margin: 20px auto;
-    max-width: 700px;
-    text-align: center;
+    color: #9e9e9e;
     font-weight: 500;
+  }
+
+  .severity-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0 0;
+  }
+
+  .severity-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .severity-label {
+    text-transform: capitalize;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #555;
+  }
+
+  /* Empty state styling */
+  .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  .empty-state-icon {
+    font-size: 3rem;
+    color: #bdbdbd;
+    margin-bottom: 15px;
+  }
+
+  .empty-state-text {
+    color: #757575;
     font-size: 1.1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .empty-state-action {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+
+  .empty-state-action:hover {
+    background-color: #388e3c;
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .profile-hero h1 {
+      font-size: 2rem;
+    }
+    
+    .quote-text {
+      font-size: 1.1rem;
+    }
+    
+    .assessment-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .quote-mark {
+      font-size: 4rem;
+    }
   }
 </style>
 
-<div class="welcome-section">
-  <h2>Welcome back, {{ user.username }} 👋</h2>
-  <p>
-    Your mental health matters. We're here to help you track and improve it.
-  </p>
+<div class="profile-hero">
+  <h1>Welcome back, {{ user.username }} 👋</h1>
+  <p>Your mental health journey matters. Track your progress and discover insights to help you thrive every day.</p>
 </div>
 
-<div class="motivational">
-  “Every day may not be good... but there's something good in every day.” —
-  Alice Morse Earle
+<div class="quote-card">
+  <span class="quote-mark quote-mark-left">"</span>
+  <div class="quote-text">Every day may not be good... but there's something good in every day.</div>
+  <div class="quote-author">— Alice Morse Earle</div>
+  <span class="quote-mark quote-mark-right">"</span>
 </div>
 
-<h3>Your Previous Assessment Attempts</h3>
-{% if attempts %}
-<div class="card-container">
-  {% for attempt in attempts %}
-  <div class="card">
-    <h4>Attempt {{ forloop.counter }}</h4>
-    <div class="date">{{ attempt.attempt_date }}</div>
-    <div class="score">
-      <ul style="list-style: none; padding: 0; margin-top: 10px">
-        {% for key, value in attempt.severity_scores.items %}
-        <li>
-          <strong style="text-transform: capitalize">{{ key }}:</strong>
-          <span class="badge severity-{{ value|lower }}">{{ value }}</span>
-        </li>
-        {% endfor %}
-      </ul>
+<div class="history-section">
+  <h2>Your Assessment History</h2>
+  
+  {% if attempts %}
+    <div class="assessment-grid">
+      {% for attempt in attempts %}
+        <div class="assessment-card">
+          <div class="card-header">
+            <h3 class="card-title">Assessment #{{ forloop.counter }}</h3>
+            <span class="card-date">{{ attempt.attempt_date }}</span>
+          </div>
+          
+          <ul class="severity-list">
+            {% for key, value in attempt.severity_scores.items %}
+              <li class="severity-item">
+                <span class="severity-label">{{ key }}</span>
+                {% with value|lower|slugify as severity_class %}
+                  <span class="severity-badge severity-{{ severity_class }}">{{ value }}</span>
+                {% endwith %}
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
     </div>
-  </div>
-  {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <div class="empty-state-icon">📋</div>
+      <p class="empty-state-text">No assessment history found. Ready to begin your wellness journey?</p>
+      <a href="{% url 'assessment' %}" class="empty-state-action">Take Your First Assessment</a>
+    </div>
+  {% endif %}
 </div>
-{% else %}
-<p class="no-data">
-  No previous attempts found. Ready to take your first assessment?
-</p>
-{% endif %} {% endblock %}
+{% endblock %}

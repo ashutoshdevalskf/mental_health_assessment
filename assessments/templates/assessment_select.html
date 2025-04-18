@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section">
+  <h1>Choose an Assessment</h1>
+  <p class="subtitle">Select an assessment to begin your evaluation</p>
+</div>
+
+<div class="assessment-grid">
+  {% for a in assessments %}
+    <div class="assessment-tile">
+      <div class="tile-inner">
+        <div class="tile-front">
+          <div class="icon-container">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h2>{{ a.title }}</h2>
+        </div>
+        <div class="tile-back">
+          <h3>{{ a.title }}</h3>
+          <p>{{a.description}}</p>
+          <form method="get" action="{% url 'assessment' assessment_id=a.id %}">
+            <button type="submit" class="start-btn">Begin Assessment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  /* Matching the color scheme from the template */
+  :root {
+    --primary: #4CAF50;
+    --primary-light: #a5d6a7;
+    --primary-dark: #388e3c;
+    --text: #333;
+    --text-light: #666;
+    --bg: #f9f9f9;
+    --card-bg: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.1);
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+
+  .hero-section {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    background-color: var(--primary);
+    color: white;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .hero-section h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .assessment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 1rem 2rem 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .assessment-tile {
+    height: 280px;
+    perspective: 1000px;
+  }
+
+  .tile-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+
+  .assessment-tile:hover .tile-inner {
+    transform: rotateY(180deg);
+  }
+
+  .tile-front, .tile-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+
+  .tile-front {
+    background-color: var(--card-bg);
+    color: var(--text);
+  }
+
+  .tile-back {
+    background-color: var(--primary);
+    color: white;
+    transform: rotateY(180deg);
+    text-align: center;
+  }
+
+  .icon-container {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: var(--primary-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .icon-container svg {
+    width: 35px;
+    height: 35px;
+    color: var(--primary);
+  }
+
+  .tile-front h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 0.5rem;
+    color: var(--text);
+  }
+
+  .tile-back h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .tile-back p {
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .start-btn {
+    background-color: white;
+    color: var(--primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .start-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Hover effect on tiles matching the template style */
+  .assessment-tile:hover {
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 768px) {
+    .assessment-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      padding: 20px;
+      gap: 15px;
+    }
+    
+    .hero-section {
+      padding: 2rem 1rem;
+    }
+    
+    .hero-section h1 {
+      font-size: 1.8rem;
+    }
+    
+    .assessment-tile {
+      height: 260px;
+    }
+  }
+</style>
+{% endblock %}

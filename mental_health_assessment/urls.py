@@ -27,5 +27,7 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
     path('accounts/register/', assessment_views.register_view, name='register'),
     path('', include('assessments.urls')),
+    path('about/', assessment_views.about_view, name='about'),
+    path('get-help/', assessment_views.get_help_view, name='get_help'),
     
 ]

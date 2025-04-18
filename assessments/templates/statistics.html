@@ -1,44 +1,72 @@
 {% extends 'base.html' %}
-{% block content %}
 
-<div class="stat">
-    <canvas id="severityChart" width="400" height="200"></canvas>
-  </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
-    const ctx = document.getElementById('severityChart').getContext('2d');
-  
-    const data = {
-      labels: {{ chart_labels|safe }},
-      datasets: [{
-        label: 'Average Severity Scores',
-        data: {{ chart_data|safe }},
-        fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
-      }]
-    };
-  
-    new Chart(ctx, {
-      type: 'line',
-      data: data,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: true
-          }
+{% block content %}
+<div style="max-width: 900px; margin: auto; text-align: center">
+  <h2>Your Mental Health Trends 📈</h2>
+  <p>Track how your severity levels changed over time.</p>
+  <canvas id="lineChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('lineChart').getContext('2d');
+
+  const labels = {{ labels|safe }};
+  const disorderData = {{ disorder_scores|safe }};
+
+  const severityLabels = ['None', 'Mild', 'Moderate', 'Mod. Severe', 'Severe'];
+  const severityColors = {
+    anxiety: 'rgba(75, 192, 192, 1)',
+    depression: 'rgba(255, 99, 132, 1)',
+    stress: 'rgba(255, 206, 86, 1)',
+    insomnia: 'rgba(153, 102, 255, 1)'
+  };
+
+  const datasets = Object.entries(disorderData).map(([disorder, scores]) => ({
+    label: disorder.charAt(0).toUpperCase() + disorder.slice(1),
+    data: scores,
+    borderColor: severityColors[disorder] || 'rgba(54, 162, 235, 1)',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+    tension: 0.3
+  }));
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          title: {
+            display: true,
+            text: 'Severity Level'
+          },
+          ticks: {
+            stepSize: 1,
+            callback: function(value) {
+              return severityLabels[value] || value;
+            }
+          },
+          min: 0,
+          max: 4
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top'
         },
-        scales: {
-          y: {
-            beginAtZero: true,
-            suggestedMax: 10
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + severityLabels[context.raw];
+            }
           }
         }
       }
-    });
-  </script>
-  
-
+    }
+  });
+</script>
 {% endblock %}

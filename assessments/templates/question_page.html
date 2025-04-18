@@ -1,48 +1,233 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
-    .question-container {
-        max-width: 600px;
-        margin: 50px auto;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    /* Progress bar styling */
+    .progress-container {
+        width: 100%;
+        background-color: #f0f0f0;
+        border-radius: 20px;
+        height: 8px;
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(to right, #4CAF50, #8BC34A);
+        border-radius: 20px;
+        transition: width 0.3s ease;
+    }
+    
+    /* Main container styling */
+    .assessment-container {
+        max-width: 650px;
+        margin: 40px auto;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         background: #fff;
+        position: relative;
     }
-
-    .question-container h2 {
+    
+    .assessment-header {
+        margin-bottom: 30px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 20px;
+    }
+    
+    .assessment-title {
         color: #4CAF50;
-        margin-bottom: 20px;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        font-weight: 600;
     }
-
-    .question-container label {
-        display: block;
-        margin: 10px 0;
+    
+    .question-number {
+        color: #666;
+        font-size: 1.1rem;
         font-weight: 500;
     }
-
-    .submit-btn {
+    
+    /* Question styling */
+    .question-text {
+        font-size: 1.25rem;
+        color: #333;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        font-weight: 500;
+    }
+    
+    /* Options styling */
+    .options-container {
+        margin: 25px 0;
+    }
+    
+    .option-item {
+        display: block;
+        padding: 15px 20px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        border: 2px solid #eee;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .option-item:hover {
+        background-color: #f0f8f0;
+        border-color: #c8e6c9;
+    }
+    
+    .option-item input[type="radio"] {
+        margin-right: 10px;
+        transform: scale(1.2);
+        accent-color: #4CAF50;
+    }
+    
+    .option-label {
+        font-weight: 500;
+        color: #555;
+        font-size: 1.1rem;
+        vertical-align: middle;
+    }
+    
+    /* Button styling */
+    .action-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+    }
+    
+    .back-link {
+        color: #666;
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: color 0.2s ease;
+    }
+    
+    .back-link:hover {
+        color: #4CAF50;
+    }
+    
+    .back-link svg {
+        width: 16px;
+        height: 16px;
+        margin-right: 6px;
+    }
+    
+    .next-btn {
         background-color: #4CAF50;
         border: none;
-        padding: 10px 20px;
+        padding: 12px 28px;
         border-radius: 8px;
         color: white;
-        font-weight: bold;
+        font-weight: 600;
         cursor: pointer;
-        margin-top: 20px;
+        transition: all 0.2s ease;
+        font-size: 1.05rem;
+        box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+    }
+    
+    .next-btn:hover {
+        background-color: #388e3c;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(76, 175, 80, 0.3);
+    }
+    
+    .next-btn:active {
+        transform: translateY(0);
+    }
+    
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .assessment-container {
+        animation: fadeIn 0.4s ease-out;
+    }
+    
+    /* Responsive styling */
+    @media (max-width: 768px) {
+        .assessment-container {
+            padding: 25px;
+            margin: 20px 15px;
+        }
+        
+        .assessment-title {
+            font-size: 1.5rem;
+        }
+        
+        .question-text {
+            font-size: 1.15rem;
+        }
+        
+        .option-item {
+            padding: 12px 15px;
+        }
+        
+        .option-label {
+            font-size: 1rem;
+        }
     }
 </style>
 
-<div class="question-container">
-    <h2>Question {{ question_number }} of {{ total }}</h2>
-    <form method="post">{% csrf_token %}
-        <p><strong>{{ question.text }}</strong></p>
-        <label><input type="radio" name="answer" value="1" required> Never</label>
-        <label><input type="radio" name="answer" value="2"> Rarely</label>
-        <label><input type="radio" name="answer" value="3"> Sometimes</label>
-        <label><input type="radio" name="answer" value="4"> Often</label>
-        <label><input type="radio" name="answer" value="5"> Always</label>
-        <button class="submit-btn" type="submit">Next</button>
+<div class="assessment-container">
+    <!-- Header section -->
+    <div class="assessment-header">
+        <h1 class="assessment-title">{{ assessment_title }}</h1>
+        <p class="question-number">Question {{ question_number }} of {{ total }}</p>
+    </div>
+    
+    <!-- Progress bar - Fixed calculation using widths directly -->
+    <div class="progress-container">
+        <div class="progress-bar" style="width: {% widthratio question_number total 100 %}%"></div>
+    </div>
+    
+    <!-- Question text -->
+    <p class="question-text">{{ question.text }}</p>
+    
+    <!-- Answer options -->
+    <form method="post">
+        {% csrf_token %}
+        <div class="options-container">
+            <label class="option-item">
+                <input type="radio" name="answer" value="1" required>
+                <span class="option-label">Never</span>
+            </label>
+            <label class="option-item">
+                <input type="radio" name="answer" value="2">
+                <span class="option-label">Rarely</span>
+            </label>
+            <label class="option-item">
+                <input type="radio" name="answer" value="3">
+                <span class="option-label">Sometimes</span>
+            </label>
+            <label class="option-item">
+                <input type="radio" name="answer" value="4">
+                <span class="option-label">Often</span>
+            </label>
+            <label class="option-item">
+                <input type="radio" name="answer" value="5">
+                <span class="option-label">Always</span>
+            </label>
+        </div>
+        
+        <!-- Action buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'select_assessment' %}" class="back-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to assessments
+            </a>
+            <button class="next-btn" type="submit">Next Question</button>
+        </div>
     </form>
 </div>
 {% endblock %}

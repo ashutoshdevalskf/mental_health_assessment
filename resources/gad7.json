@@ -1,0 +1,93 @@
+[
+    {
+      "id": 1,
+      "text": "Feeling nervous, anxious, or on edge",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Elevated anxiety levels indicated by strong agreement.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 2,
+      "text": "Not being able to stop or control worrying",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Difficulty managing worries may signal anxiety disorder.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 3,
+      "text": "Worrying too much about different things",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Persistent worry is a key indicator of generalized anxiety.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 4,
+      "text": "Trouble relaxing",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Inability to relax often accompanies anxiety.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 5,
+      "text": "Being so restless that it is hard to sit still",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Restlessness is a physiological sign of anxiety.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 6,
+      "text": "Becoming easily annoyed or irritable",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Irritability can accompany heightened anxiety.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    },
+    {
+      "id": 7,
+      "text": "Feeling afraid as if something awful might happen",
+      "disorders": ["anxiety"],
+      "source": "GAD-7",
+      "weight": 1,
+      "response_type": "Likert",
+      "reverse_scored": false,
+      "severity_threshold": 2,
+      "interpretation_guidance": "Excessive fear may indicate severe anxiety.",
+      "research_reference": "Spitzer et al. (2006)",
+      "notes": ""
+    }
+  ]
