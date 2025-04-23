@@ -1,72 +1,317 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="max-width: 900px; margin: auto; text-align: center">
-  <h2>Your Mental Health Trends 📈</h2>
-  <p>Track how your severity levels changed over time.</p>
-  <canvas id="lineChart" height="120"></canvas>
+<div class="dashboard-container">
+  <div class="header-section">
+    <h1>Track how your severity levels changed over time</h1>
+  </div>
+  
+  <div class="chart-card">
+    <div class="chart-wrapper">
+      <canvas id="lineChart"></canvas>
+    </div>
+    
+    <div class="legend-container">
+      <div class="legend-item">
+        <span class="color-dot" style="background-color: rgba(75, 192, 192, 1)"></span>
+        <span class="legend-label">Anxiety</span>
+      </div>
+      <div class="legend-item">
+        <span class="color-dot" style="background-color: rgba(255, 99, 132, 1)"></span>
+        <span class="legend-label">Depression</span>
+      </div>
+      <div class="legend-item">
+        <span class="color-dot" style="background-color: rgba(255, 206, 86, 1)"></span>
+        <span class="legend-label">Stress</span>
+      </div>
+      <div class="legend-item">
+        <span class="color-dot" style="background-color: rgba(153, 102, 255, 1)"></span>
+        <span class="legend-label">Insomnia</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="severity-guide">
+    <h3>Severity Scale</h3>
+    <div class="severity-levels">
+      <div class="severity-level">
+        <span class="severity-dot level-0"></span>
+        <span>None</span>
+      </div>
+      <div class="severity-level">
+        <span class="severity-dot level-1"></span>
+        <span>Mild</span>
+      </div>
+      <div class="severity-level">
+        <span class="severity-dot level-2"></span>
+        <span>Moderate</span>
+      </div>
+      <div class="severity-level">
+        <span class="severity-dot level-3"></span>
+        <span>Mod. Severe</span>
+      </div>
+      <div class="severity-level">
+        <span class="severity-dot level-4"></span>
+        <span>Severe</span>
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+  .dashboard-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+  
+  .header-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg,
+      rgba(76, 175, 80, 1) 0%,       /* 'none' - Green */
+      rgba(255, 193, 7, 0.8) 70%,     
+           
+      rgba(76, 175, 80, 1) 100%     
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 300;
+  }
+  
+  .chart-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  
+  
+  .chart-wrapper {
+    height: 400px;
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .legend-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+  }
+  
+  .color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    display: inline-block;
+  }
+  
+  .legend-label {
+    font-weight: 500;
+  }
+  
+  .severity-guide {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .severity-guide h3 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .severity-levels {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .severity-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.9rem;
+    padding: 0.75rem;
+    flex: 1;
+    min-width: 80px;
+  }
+  
+  .severity-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+  }
+  
+  .level-0 { background-color: #e0e0e0; }
+  .level-1 { background-color: rgba(75, 192, 192, 0.7); }
+  .level-2 { background-color: rgba(255, 206, 86, 0.7); }
+  .level-3 { background-color: rgba(255, 159, 64, 0.7); }
+  .level-4 { background-color: rgba(255, 99, 132, 0.7); }
+  
+  @media (max-width: 768px) {
+    .chart-wrapper {
+      height: 300px;
+    }
+    
+    .severity-levels {
+      justify-content: center;
+    }
+    
+    .severity-level {
+      min-width: 60px;
+    }
+  }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const ctx = document.getElementById('lineChart').getContext('2d');
-
-  const labels = {{ labels|safe }};
-  const disorderData = {{ disorder_scores|safe }};
-
-  const severityLabels = ['None', 'Mild', 'Moderate', 'Mod. Severe', 'Severe'];
-  const severityColors = {
-    anxiety: 'rgba(75, 192, 192, 1)',
-    depression: 'rgba(255, 99, 132, 1)',
-    stress: 'rgba(255, 206, 86, 1)',
-    insomnia: 'rgba(153, 102, 255, 1)'
-  };
-
-  const datasets = Object.entries(disorderData).map(([disorder, scores]) => ({
-    label: disorder.charAt(0).toUpperCase() + disorder.slice(1),
-    data: scores,
-    borderColor: severityColors[disorder] || 'rgba(54, 162, 235, 1)',
-    backgroundColor: 'rgba(0, 0, 0, 0)',
-    tension: 0.3
-  }));
-
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          title: {
-            display: true,
-            text: 'Severity Level'
-          },
-          ticks: {
-            stepSize: 1,
-            callback: function(value) {
-              return severityLabels[value] || value;
+  document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    
+    const labels = {{ labels|safe }};
+    const disorderData = {{ disorder_scores|safe }};
+    
+    const severityLabels = ['None', 'Mild', 'Moderate', 'Mod. Severe', 'Severe'];
+    const severityColors = {
+      anxiety: 'rgba(75, 192, 192, 1)',
+      depression: 'rgba(255, 99, 132, 1)',
+      stress: 'rgba(255, 206, 86, 1)',
+      insomnia: 'rgba(153, 102, 255, 1)'
+    };
+    
+    const datasets = Object.entries(disorderData).map(([disorder, scores]) => ({
+      label: disorder.charAt(0).toUpperCase() + disorder.slice(1),
+      data: scores,
+      borderColor: severityColors[disorder] || 'rgba(54, 162, 235, 1)',
+      backgroundColor: `${severityColors[disorder]?.replace('1)', '0.1)')}` || 'rgba(54, 162, 235, 0.1)',
+      borderWidth: 3,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+      pointBackgroundColor: 'white',
+      pointBorderColor: severityColors[disorder] || 'rgba(54, 162, 235, 1)',
+      pointBorderWidth: 2,
+      tension: 0.4
+    }));
+    
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        scales: {
+          y: {
+            title: {
+              display: true,
+              text: 'Severity Level',
+              font: {
+                size: 14,
+                weight: 'bold'
+              },
+              padding: {
+                bottom: 10
+              }
+            },
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return severityLabels[value] || value;
+              },
+              font: {
+                size: 12
+              }
+            },
+            min: 0,
+            max: 4,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)',
+              drawBorder: false
             }
           },
-          min: 0,
-          max: 4
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              return context.dataset.label + ': ' + severityLabels[context.raw];
+          x: {
+            grid: {
+              display: false
+            },
+            ticks: {
+              font: {
+                size: 12
+              }
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            titleColor: '#333',
+            bodyColor: '#333',
+            borderColor: 'rgba(0, 0, 0, 0.1)',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            titleFont: {
+              size: 14,
+              weight: 'bold'
+            },
+            bodyFont: {
+              size: 13
+            },
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + severityLabels[context.raw];
+              }
+            }
+          }
+        },
+        animation: {
+          duration: 2000,
+          easing: 'easeOutQuart'
         }
       }
-    }
+    });
   });
 </script>
 {% endblock %}

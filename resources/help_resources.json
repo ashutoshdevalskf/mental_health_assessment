@@ -1,0 +1,154 @@
+{
+    "depression": {
+      "none": [],
+      "mild": [
+        {
+          "name": "Mindfulness App",
+          "link": "https://www.headspace.com",
+          "type": "self-help"
+        },
+        {
+          "name": "Moodfit",
+          "link": "https://www.getmoodfit.com",
+          "type": "self-help"
+        }
+      ],
+      "moderate": [
+        {
+          "name": "TalkLife Community",
+          "link": "https://talklife.co",
+          "type": "peer support"
+        },
+        {
+          "name": "7 Cups Listeners",
+          "link": "https://www.7cups.com/listener-program/",
+          "type": "peer support"
+        }
+      ],
+      "moderately severe": [
+        {
+          "name": "7 Cups Therapy",
+          "link": "https://www.7cups.com",
+          "type": "online therapy"
+        },
+        {
+          "name": "TherapyRoute",
+          "link": "https://www.therapyroute.com",
+          "type": "professional therapy"
+        }
+      ],
+      "severe": [
+        {
+          "name": "National Suicide Prevention Lifeline",
+          "link": "https://988lifeline.org",
+          "type": "emergency"
+        },
+        {
+          "name": "SAMHSA Helpline",
+          "link": "https://www.samhsa.gov/find-help/national-helpline",
+          "type": "emergency"
+        }
+      ]
+    },
+    "anxiety": {
+      "mild": [
+        {
+          "name": "Calm App",
+          "link": "https://www.calm.com",
+          "type": "self-help"
+        },
+        {
+          "name": "Sanvello",
+          "link": "https://www.sanvello.com",
+          "type": "self-help"
+        }
+      ],
+      "moderate": [
+        {
+          "name": "BetterHelp",
+          "link": "https://www.betterhelp.com",
+          "type": "professional therapy"
+        },
+        {
+          "name": "MindShift CBT App",
+          "link": "https://www.anxietycanada.com/resources/mindshift-cbt/",
+          "type": "self-help"
+        }
+      ],
+      "moderately severe": [
+        {
+          "name": "Online-Therapy.com",
+          "link": "https://www.online-therapy.com",
+          "type": "online therapy"
+        },
+        {
+          "name": "Pride Counseling (if relevant)",
+          "link": "https://www.pridecounseling.com",
+          "type": "professional therapy"
+        }
+      ],
+      "severe": [
+        {
+          "name": "Crisis Text Line",
+          "link": "https://www.crisistextline.org",
+          "type": "emergency"
+        },
+        {
+          "name": "Anxiety and Depression Association of America (ADAA)",
+          "link": "https://adaa.org",
+          "type": "professional help"
+        }
+      ]
+    },
+    "ocd": {
+      "mild": [
+        {
+          "name": "NOCD App",
+          "link": "https://www.treatmyocd.com",
+          "type": "self-help"
+        },
+        {
+          "name": "OCD Challenge",
+          "link": "https://www.ocdchallenge.com",
+          "type": "interactive self-help"
+        }
+      ],
+      "moderate": [
+        {
+          "name": "OCD Action Forums",
+          "link": "https://ocdaction.org.uk/forums/",
+          "type": "peer support"
+        },
+        {
+          "name": "My OCD Community on HealthUnlocked",
+          "link": "https://healthunlocked.com/ocd-uk",
+          "type": "peer support"
+        }
+      ],
+      "moderately severe": [
+        {
+          "name": "NOCD Therapy",
+          "link": "https://www.treatmyocd.com/therapy",
+          "type": "online therapy"
+        },
+        {
+          "name": "OCD Peers Support Group",
+          "link": "https://www.ocdpeers.com",
+          "type": "peer support"
+        }
+      ],
+      "severe": [
+        {
+          "name": "International OCD Foundation",
+          "link": "https://iocdf.org",
+          "type": "professional therapy"
+        },
+        {
+          "name": "Psychology Today Therapist Finder",
+          "link": "https://www.psychologytoday.com/us/therapists/obsessive-compulsive-ocd",
+          "type": "professional therapy"
+        }
+      ]
+    }
+  }
+  

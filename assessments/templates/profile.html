@@ -260,7 +260,7 @@
 </style>
 
 <div class="profile-hero">
-  <h1>Welcome back, {{ user.username }} 👋</h1>
+  <h1>Welcome!, {{ user.username }} 👋</h1>
   <p>Your mental health journey matters. Track your progress and discover insights to help you thrive every day.</p>
 </div>
 
@@ -300,7 +300,7 @@
     <div class="empty-state">
       <div class="empty-state-icon">📋</div>
       <p class="empty-state-text">No assessment history found. Ready to begin your wellness journey?</p>
-      <a href="{% url 'assessment' %}" class="empty-state-action">Take Your First Assessment</a>
+      <a href="{% url 'select_assessment' %}" class="empty-state-action">Take Your First Assessment</a>
     </div>
   {% endif %}
 </div>

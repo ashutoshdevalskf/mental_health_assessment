@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+  .history-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .history-heading {
+    text-align: center;
+    margin: 40px 0 30px;
+    font-size: 2.2rem;
+    color: #333;
+    font-weight: 600;
+  }
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .history-table thead {
+    background-color: #f5f5f5;
+  }
+  .history-table th {
+    padding: 15px;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+    font-weight: 600;
+  }
+  .history-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+  .history-table tr:hover {
+    background-color: #f9f9f9;
+  }
+  .btn-delete {
+    background: #e53935;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 0.9rem;
+  }
+  .btn-delete:hover {
+    background: #b71c1c;
+  }
+  .details {
+    display: none;
+    background: #fafafa;
+    padding: 20px;
+    border-left: 4px solid #4CAF50;
+  }
+  .clickable {
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .clickable:hover {
+    background-color: #f5f5f5;
+  }
+  .detail-section {
+    margin-bottom: 15px;
+  }
+  .detail-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+  }
+  .score-item {
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  .score-label {
+    font-weight: 500;
+    color: #555;
+  }
+  .score-value {
+    font-weight: 600;
+    color: #333;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+  }
+  .empty-state a {
+    color: #2196F3;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .empty-state a:hover {
+    text-decoration: underline;
+  }
+  .expand-icon {
+    float: right;
+    color: #777;
+    transition: transform 0.3s;
+  }
+  .expanded .expand-icon {
+    transform: rotate(180deg);
+  }
+</style>
+
+<div class="history-container">
+  <h2 class="history-heading">📜 Your Assessment History</h2>
+  
+  <table class="history-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Date</th>
+        <th>Assessment</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for attempt in attempts %}
+        <tr class="clickable" data-id="detail-{{ attempt.id }}">
+          <td>{{ forloop.counter }}</td>
+          <td>{{ attempt.attempted_at|date:"M d, Y H:i" }}</td>
+          <td>{{ attempt.assessment.title }}</td>
+          <td>
+            <form method="post" action="{% url 'history_delete' attempt.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+            <span class="expand-icon">▼</span>
+          </td>
+        </tr>
+        <tr id="detail-{{ attempt.id }}" class="details">
+          <td colspan="4">
+            <div class="detail-section">
+              <div class="detail-title">Severity Scores</div>
+              <div class="score-grid">
+                {% for key, value in attempt.severity_scores.items %}
+                  <div class="score-item">
+                    <span class="score-label">{{ key|capfirst }}:</span>
+                    <span class="score-value">{{ value|capfirst }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            
+            <div class="detail-section">
+              <div class="detail-title">Raw Scores</div>
+              <div class="score-grid">
+                {% for key, value in attempt.raw_scores.items %}
+                  <div class="score-item">
+                    <span class="score-label">{{ key|capfirst }}:</span>
+                    <span class="score-value">{{ value }}</span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4" class="empty-state">
+            <p>No assessment history found.</p>
+            <p><a href="{% url 'select_assessment' %}">Take an assessment now →</a></p>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll('tr.clickable').forEach(row => {
+    row.addEventListener('click', () => {
+      const detailId = row.getAttribute('data-id');
+      const detail = document.getElementById(detailId);
+      if (detail.style.display === 'table-row') {
+        detail.style.display = 'none';
+        row.classList.remove('expanded');
+      } else {
+        detail.style.display = 'table-row';
+        row.classList.add('expanded');
+      }
+    });
+  });
+</script>
+
+{% endblock %}

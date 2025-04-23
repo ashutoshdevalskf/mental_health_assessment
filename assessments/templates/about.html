@@ -1,15 +1,236 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="max-width: 800px; margin: 40px auto; text-align: center;">
-  <h2 style="color: #4CAF50;">About Our Platform</h2>
-  <p style="font-size: 1.1rem; margin-top: 20px;">
-    We are committed to helping individuals better understand their mental health through science-backed assessments and tools. Our goal is to create a safe and supportive space where everyone feels empowered to seek help and take control of their well-being.
-  </p>
-  <p style="margin-top: 15px;">
-    This platform is built using Django and is designed with user privacy, data security, and accessibility in mind.
-  </p>
-  <p style="margin-top: 15px;">
-    Whether you're here for self-assessment, resources, or support, we're glad you took this step. 💚
-  </p>
+<div class="about-container">
+
+  <!-- Website Introduction -->
+  <section class="about-website">
+    <div class="section-content">
+      <h2>About Our Platform</h2>
+      <p>Welcome to <strong>Mind +</strong>, a self-assessment platform designed to help you better understand your mental health. 
+      Our goal is to make evidence-based screening tools accessible, private, and easy to use from anywhere. 
+      We combine research-backed questionnaires with a clean interface to give you insight into your current mental wellbeing.</p>
+    </div>
+  </section>
+
+  <!-- Assessment Section -->
+  <section class="assessment-section">
+    <div class="section-content">
+      <h2>Our Assessments</h2>
+      <p>All assessments on this platform are derived from clinically validated tools used in mental health practice and research. 
+      Your responses are completely private and are meant to offer guidance — not a diagnosis.</p>
+    </div>
+
+    <div class="assessment-gallery">
+
+      <!-- General Mental Health Test -->
+      <div class="assessment-card">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="#4CAF50" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 8v8M8 12h8" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <h3>General Mental Health Test</h3>
+          <p>This composite screening includes questions from PHQ‑9, GAD‑7, and OCI‑R. It's designed to offer a broad overview of your mental state.</p>
+          <div class="card-footer">
+            <small>Based on: <a href="#phq9">PHQ‑9</a>, <a href="#gad7">GAD‑7</a>, <a href="#ocir">OCI‑R</a></small>
+            <a href="{% url 'assessment' 1 %}" class="btn-take-test">Take Test</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHQ-9 -->
+      <div class="assessment-card" id="phq9">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="#4CAF50" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 20v-6M12 8V4" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <h3>PHQ‑9 Depression Assessment</h3>
+          <p>A widely-used tool to measure the severity of depression symptoms. Useful for self-monitoring over time.</p>
+          <div class="card-footer">
+            <small><a href="https://pubmed.ncbi.nlm.nih.gov/11556941/" target="_blank">Spitzer et al., 2001</a></small>
+            <a href="{% url 'assessment' 2 %}" class="btn-take-test">Take Test</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAD-7 -->
+      <div class="assessment-card" id="gad7">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="#4CAF50" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+            <line x1="9" y1="9" x2="9" y2="9" />
+            <line x1="15" y1="9" x2="15" y2="9" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <h3>GAD‑7 Anxiety Assessment</h3>
+          <p>GAD‑7 is a 7-item scale that screens for and measures the severity of generalized anxiety disorder.</p>
+          <div class="card-footer">
+            <small><a href="https://jamanetwork.com/journals/jamainternalmedicine/fullarticle/410326" target="_blank">Spitzer et al., 2006</a></small>
+            <a href="{% url 'assessment' 3 %}" class="btn-take-test">Take Test</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- OCI-R -->
+      <div class="assessment-card" id="ocir">
+        <div class="card-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="#4CAF50" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M8 12l2 2 6-6" />
+          </svg>
+        </div>
+        <div class="card-content">
+          <h3>OCI‑R OCD Assessment</h3>
+          <p>The Obsessive-Compulsive Inventory‑Revised is used to assess and monitor OCD symptoms and their severity.</p>
+          <div class="card-footer">
+            <small><a href="https://pubmed.ncbi.nlm.nih.gov/11911035/" target="_blank">Foa et al., 2002</a></small>
+            <a href="{% url 'assessment' 4 %}" class="btn-take-test">Take Test</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section">
+    <div class="cta-content">
+      <h2>Ready to understand your mental health better?</h2>
+      <p>Take our comprehensive General Mental Health assessment to get started.</p>
+      <button class="btn-primary">Begin Assessment</button>
+    </div>
+  </section>
 </div>
+
+<!-- Inline Styles -->
+<style>
+  .about-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    color: #333;
+  }
+
+  .section-content {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    color: #4CAF50;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+  }
+
+  .assessment-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+  }
+
+  .assessment-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .assessment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-color: rgba(76, 175, 80, 0.4);
+  }
+
+  .card-icon {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(76, 175, 80, 0.05);
+  }
+
+  .card-content {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  a{
+    text-decoration:none;
+  }
+
+  .card-content h3 {
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+    color: #333;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+  }
+
+  .btn-take-test {
+    border: 1px solid #4CAF50;
+    background: transparent;
+    color: #4CAF50;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .btn-take-test:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+  }
+
+  .cta-section {
+    text-align: center;
+    margin: 60px 0 20px;
+  }
+
+  .btn-primary {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #43a047;
+  }
+
+  a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
 {% endblock %}

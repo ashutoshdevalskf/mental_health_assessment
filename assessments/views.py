@@ -1,7 +1,7 @@
+import datetime
 import json
 from django.conf import settings
 from django.shortcuts import get_object_or_404, render, redirect
-from .forms import AssessmentForm
 from .models import AssessmentAttempt
 from .utils import calculate_disorder_scores
 from django.contrib.auth.decorators import login_required
@@ -158,6 +158,9 @@ def profile_view(request):
 
     return render(request, 'profile.html', {'attempts': attempts})
 
+
+
+
 from .forms import CustomUserCreationForm
 
 def register_view(request):
@@ -225,6 +228,61 @@ def statistic_view(request):
 def about_view(request):
     return render(request, 'about.html')
 
-def get_help_view(request):
-    return render(request, 'get_help.html')
 
+@login_required
+def get_help_view(request):
+    # Get most recent assessment attempt
+    latest_attempt = AssessmentAttempt.objects.filter(user=request.user).order_by('-attempted_at').first()
+
+    if not latest_attempt:
+        return render(request, 'get_help.html', {
+            'resources': {},
+            'message': "You haven't completed any assessments yet. Please complete one to get help resources."
+        })
+
+    severity_scores = latest_attempt.severity_scores
+
+    help_resources_path = os.path.join(settings.BASE_DIR, 'resources', 'help_resources.json')
+
+    with open(help_resources_path, 'r') as f:
+        all_resources = json.load(f)
+
+    # Gather relevant help contacts
+    relevant_resources = {}
+
+    for disorder, severity in severity_scores.items():
+        disorder = disorder.lower()
+        severity = severity.lower()
+
+        if disorder in all_resources:
+            severity_data = all_resources[disorder].get(severity, [])
+            if severity_data:
+                relevant_resources[disorder] = severity_data
+
+    return render(request, 'get_help.html', {
+        'resources': relevant_resources
+    })
+
+
+
+@login_required
+def history_view(request):
+     # Fetch all attempts for user, newest first
+     attempts = (
+         AssessmentAttempt.objects
+         .filter(user=request.user)
+         .order_by('-attempted_at')
+     )
+     return render(request, 'history.html', {'attempts': attempts})
+
+@login_required
+def history_delete_view(request, attempt_id):
+     attempt = get_object_or_404(
+         AssessmentAttempt,
+         pk=attempt_id,
+         user=request.user
+     )
+     if request.method == 'POST':
+        attempt.delete()
+        
+     return redirect('history')

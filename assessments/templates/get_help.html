@@ -1,20 +1,294 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<div style="max-width: 800px; margin: 40px auto; text-align: center;">
-  <h2 style="color: #f44336;">Get Help</h2>
-  <p style="font-size: 1.1rem; margin-top: 20px;">
-    If you're struggling or need someone to talk to, please know that you're not alone.
-  </p>
-
-  <ul style="list-style: none; padding: 0; font-size: 1rem; margin-top: 25px;">
-    <li><strong>📞 National Mental Health Helpline:</strong> 1-800-662-HELP (4357)</li>
-    <li><strong>💬 Crisis Text Line:</strong> Text "HELLO" to 741741</li>
-    <li><strong>🌐 Therapy Resource:</strong> <a href="https://www.betterhelp.com" target="_blank">BetterHelp</a></li>
-    <li><strong>🌐 Indian Helpline:</strong> <a href="https://mentalhealthindia.org" target="_blank">Mental Health India</a></li>
-  </ul>
-
-  <p style="margin-top: 30px;">
-    This site is not a replacement for professional care. If you're in immediate danger, please call emergency services.
-  </p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support & Help Resources</title>
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --primary-light: #4caf50;
+            --primary-dark: #1b5e20;
+            --accent-color: #81c784;
+            --text-light: #f1f8e9;
+            --text-dark: #263238;
+            --card-bg: #ffffff;
+            --bg-color: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            margin: 0;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .resources-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .resource-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .resource-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .resource-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+        
+        .resource-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 4px;
+        }
+        
+        .resource-type {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--text-dark);
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-right: 8px;
+        }
+        
+        .resource-link {
+            display: inline-block;
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-top: 8px;
+            transition: color 0.2s;
+            position: relative;
+        }
+        
+        .resource-link:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary-light);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+        
+        .resource-link:hover {
+            color: var(--primary-dark);
+        }
+        
+        .resource-link:hover:after {
+            transform: scaleX(1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            color: #757575;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        @media (max-width: 768px) {
+            .resources-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <main class="container">
+        <h2 class="page-title">Support & Help Resources</h2>
+        
+        <div id="resources-content">
+            {% if resources %}
+                <div class="resources-container">
+                    {% for disorder, entries in resources.items %}
+                        <div class="resource-card">
+                            <div class="card-header">{{ disorder|title }}</div>
+                            <div class="card-body">
+                                <ul class="resource-list">
+                                    {% for res in entries %}
+                                        <li class="resource-item">
+                                            <span class="resource-name">{{ res.name }}</span>
+                                            <span class="resource-type">{{ res.type }}</span>
+                                            <a href="{{ res.link }}" target="_blank" class="resource-link">Visit Resource</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No personalized resources available yet. Please complete an assessment first.</p>
+                    <a href="{% url 'select_assessment' %}" class="btn">Take Assessment</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+    
+    <script>
+        // Sample data for preview purposes
+        const sampleResources = {};
+        
+        // This script will use sample data if no resources are provided from the server
+        document.addEventListener('DOMContentLoaded', function() {
+            const resourcesContent = document.getElementById('resources-content');
+            
+            // Check if the container is empty or contains the "no resources" message
+            if (resourcesContent.querySelector('.empty-state')) {
+                console.log("No resources found from server, using sample data for preview");
+                // You can uncomment this to see the sample data in action during development
+                // renderSampleResources();
+            }
+        });
+        
+        function renderSampleResources() {
+            const resourcesContent = document.getElementById('resources-content');
+            resourcesContent.innerHTML = '';
+            
+            const container = document.createElement('div');
+            container.className = 'resources-container';
+            
+            for (const [disorder, entries] of Object.entries(sampleResources)) {
+                const card = document.createElement('div');
+                card.className = 'resource-card';
+                
+                const cardHeader = document.createElement('div');
+                cardHeader.className = 'card-header';
+                cardHeader.textContent = disorder.charAt(0).toUpperCase() + disorder.slice(1);
+                
+                const cardBody = document.createElement('div');
+                cardBody.className = 'card-body';
+                
+                const list = document.createElement('ul');
+                list.className = 'resource-list';
+                
+                entries.forEach(res => {
+                    const item = document.createElement('li');
+                    item.className = 'resource-item';
+                    
+                    const name = document.createElement('span');
+                    name.className = 'resource-name';
+                    name.textContent = res.name;
+                    
+                    const type = document.createElement('span');
+                    type.className = 'resource-type';
+                    type.textContent = res.type;
+                    
+                    const link = document.createElement('a');
+                    link.className = 'resource-link';
+                    link.href = res.link;
+                    link.target = '_blank';
+                    link.textContent = 'Visit Resource';
+                    
+                    item.appendChild(name);
+                    item.appendChild(type);
+                    item.appendChild(document.createElement('br'));
+                    item.appendChild(link);
+                    
+                    list.appendChild(item);
+                });
+                
+                cardBody.appendChild(list);
+                card.appendChild(cardHeader);
+                card.appendChild(cardBody);
+                container.appendChild(card);
+            }
+            
+            resourcesContent.appendChild(container);
+        }
+    </script>
+</body>
+</html>
 {% endblock %}
