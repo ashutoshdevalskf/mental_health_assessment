@@ -29,6 +29,7 @@ class QuestionMock:
         self.weight = data.get('weight', 1)
         self.disorders = data['disorders']
 
+
 @login_required
 def select_assessment_view(request):
     assessments = Assessment.objects.all()
@@ -151,15 +152,11 @@ def results_view(request):
     return render(request, 'results.html', {'results': results_with_visual})
 
 
-
 @login_required
 def profile_view(request):
     attempts = AssessmentAttempt.objects.filter(user=request.user).order_by('-attempted_at')
 
     return render(request, 'profile.html', {'attempts': attempts})
-
-
-
 
 from .forms import CustomUserCreationForm
 
@@ -247,7 +244,7 @@ def get_help_view(request):
     with open(help_resources_path, 'r') as f:
         all_resources = json.load(f)
 
-    # Gather relevant help contacts
+    
     relevant_resources = {}
 
     for disorder, severity in severity_scores.items():
@@ -267,7 +264,7 @@ def get_help_view(request):
 
 @login_required
 def history_view(request):
-     # Fetch all attempts for user, newest first
+    
      attempts = (
          AssessmentAttempt.objects
          .filter(user=request.user)
